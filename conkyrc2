@@ -173,12 +173,9 @@ DISK ${hr}
         ${diskiograph 49,220 fef7b2 e18522}
   SDA: R: ${diskio_read /dev/sda}${goto 160}W: ${diskio_write /dev/sda}
 /: ${fs_bar /} ${fs_size /}   ${fs_used_perc /} %
-/Encrypt: ${fs_bar /encrypt} ${fs_size /encrypt}   ${fs_used_perc /encrypt} %
-/Plex: ${fs_bar /plex} ${fs_size /plex}   ${fs_used_perc /plex} %
 NETWORK ${hr} 
 WLAN0: ${goto 68}${downspeedgraph wlan0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph wlan0 24,88 fef7b2 e18522 -t -l}
 ${goto 68}Down: ${downspeedf wlan0}${goto 165}Up: ${upspeedf wlan0}
-TAP0: ${goto 68}${downspeedgraph tap0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph tap0 24,88 fef7b2 e18522 -t -l}
 ${goto 68}Down: ${downspeedf tap0}${goto 165}Up: ${upspeedf tap0}
 VPN: ${goto 68}${downspeedgraph tun0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph tun0 24,88 fef7b2 e18522 -t -l}
 ${goto 68}Down: ${downspeedf tun0}${goto 165}Up: ${upspeedf tun0}
