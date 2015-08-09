@@ -1,0 +1,187 @@
+# killall conky && conky -c ~/conky/ARCH.conky &
+# Inspired by lowph on ARCH
+## https://bbs.archlinux.org/viewtopic.php?pid=1084955#p1084955
+###  Begin Window Settings  ##################################################
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,sticky,below,skip_taskbar,skip_pager
+# own_window_colour brown
+own_window_class lowph
+own_window_title lowph
+
+# Use the Xdbe extension? (eliminates flicker)
+# It is highly recommended to use own window with this one
+# so double buffer won't be so big.
+double_buffer yes
+
+### ARGB can be used for real transparency
+### NOTE that a composite manager is required for real transparency.
+### This option will not work as desired (in most cases) in conjunction with
+### own_window_type override
+### own_window_argb_visual yes
+
+### When ARGB visuals are enabled, this use this to modify the alpha value
+### Valid range is 0-255, where 0 is 0% opacity, and 255 is 100% opacity.
+#own_window_argb_value 200
+
+minimum_size 255 0     ## width, height
+maximum_width 255       ## width, usually a good idea to equal minimum width
+
+gap_x 10 # left-right
+gap_y 10 # up-down
+
+### alignment can be:
+# top_left, top_right, top_middle
+# bottom_left, bottom_right, bottom_middle
+# middle_left, middle_middle, middle_right ######### or none
+# can be abreviated as: tl, tr, tm, bl, br, bm, ml, mm, mr
+alignment tr 
+###################################################  End Window Settings  ###
+###  Font Settings  #########################################################
+# Use Xft (anti-aliased font and stuff)
+use_xft yes
+xftfont WenQuanYi Micro Hei Mono:bold:size=8
+
+# Alpha of Xft font. Must be a value at or between 1 and 0 ###
+xftalpha 0
+# Force UTF8? requires XFT ###
+override_utf8_locale yes
+
+draw_shades no
+default_shade_color black
+
+draw_outline no # amplifies text if yes
+default_outline_color black
+
+uppercase yes 
+######################################################  End Font Settings  ###
+###  Color Settings  #########################################################
+default_shade_color grey
+default_outline_color black
+
+default_color DCDCDC #Gainsboro
+color0 9ACD32 #YellowGreen
+color1 778899 #LightSlateGrey
+color2 FF8C00 #Darkorange
+color3 7FFF00 #Chartreuse
+color4 FFA07A #LightSalmon
+color5 FFDEAD #NavajoWhite
+color6 00BFFF #DeepSkyBlue
+color7 00FFFF #Cyan 
+color10 48D1CC #MediumTurquoise
+color8 FFFF00 #Yellow
+color9 FF0000 #Red
+#####################################################  End Color Settings  ###
+###  Borders Section  ########################################################
+draw_borders no
+# Stippled borders?
+stippled_borders 0
+# border margins
+border_inner_margin 5
+border_outer_margin 0
+# border width
+border_width 0
+# graph borders
+draw_graph_borders no #yes
+default_graph_size 15 40
+#####################################################  End Borders Secton  ###
+###  Miscellaneous Section  ##################################################
+
+# Boolean value, if true, Conky will be forked to background when started.
+background yes 
+
+# Adds spaces around certain objects to stop them from moving other things
+# around, this only helps if you are using a mono font
+# Options: right, left or none
+use_spacer none
+
+# Default and Minimum size is 256 - needs more for single commands that
+# "call" a lot of text IE: bash scripts
+text_buffer_size 1028
+
+# Subtract (file system) buffers from used memory?
+no_buffers yes
+
+# change GiB to G and MiB to M
+short_units yes
+
+# Like it says, ot pads the decimals on % values
+# doesn't seem to work since v1.7.1
+pad_percents 2
+
+##############################################  End Miscellaneous Section  ###
+###  LUA Settings  ###########################################################
+## Above and After TEXT - requires a composite manager or blinks.
+##
+# lua_load ~/Conky/LUA/draw-bg.lua
+#TEXT
+#${lua conky_draw_bg 10 0 0 0 0 0x000000 0.6}
+#
+## ${lua conky_draw_bg corner_radius x_position y_position width height color alpha}
+##
+## OR Both above TEXT (No composite manager required - no blinking!)
+#
+#lua_load ~/Conky/LUA/draw-bg.lua
+#lua_draw_hook_post draw_bg 10 0 0 0 0 0xBFBFBF 0.2
+#lua_draw_hook_pre draw_bg 10 0 0 0 0 0x000000 0.5
+#
+## Calling the weather script
+#
+# lua_load ~/v9000/v9000.lua
+# lua_draw_hook_post weather
+# lua_load ~/Conky/templates/S11_V9_R-template.lua
+#
+#starts the lua weather data gathering function, call once at top of conkyrc
+##
+#######################################################  End LUA Settings  ###
+
+
+# The all important - How often conky refreshes.
+# If you have a "Crey" try: 0.2 - smokin' - but watch the CPU useage go UP!
+update_interval 1.0
+
+default_bar_size 80 6
+TEXT
+${hr}
+${font LCDMono2:size=46}${time %R}${font LCDMono2:size=10}:${time %S}${font}
+${voffset -63}${font LCDMono2:size=20}${goto 199}${time %b}${font}
+${font LCDMono2:size=20}${goto 220}${time %y}${font}
+${hr}
+${font LCDMono2:size=12}${goto 15}SU MO  ${color6}${time %b %y}${color}  FR SA
+${goto 15}${execpi 3600 CPS=`date +%-d`; cal -h | sed '2d' | sed -e '1d' -e 's/\<'"$CPS"'\>/${color6}&${color}/'}${font}
+${voffset -20}SYSTEM ${hr} 
+Hostname: ${nodename} $alignr Workspace ${desktop}
+User: ${uid_name 0} $alignr Public IP:${execi 6000 curl ifconfig.me} 
+Group: ${gid_name 0} $alignr LAN IP:${addr wlan0}
+Machine: ${machine}
+Kernel: ${kernel}
+STRESS ${hr} 
+${cpugraph cpu0 100,250 fef7b2 e18522 -t -l}
+CPU0: ${cpubar cpu0} ${cpu cpu0}%${goto 170}SDA: ${execpi 15 hddtemp -n /dev/sda}°
+CPU1: ${cpubar cpu1} ${cpu cpu1}%${goto 170}SDB: ${execpi 15 hddtemp -n /dev/sdb}°
+CPU2: ${cpubar cpu2} ${cpu cpu2}%${goto 170}M/B: ${hwmon 2 temp 1}°
+CPU3: ${cpubar cpu3} ${cpu cpu3}%${goto 170}CPU: ${hwmon 1 temp 1}°
+CPU4: ${cpubar cpu4} ${cpu cpu4}%${goto 170}FAN: ${exec cat /sys/devices/virtual/thermal/cooling_device11/cur_state} rpm
+CPU5: ${cpubar cpu5} ${cpu cpu5}%
+CPU6: ${cpubar cpu6} ${cpu cpu6}%
+CPU7: ${cpubar cpu7} ${cpu cpu7}%
+RAM : ${membar} ${memmax} @ ${memperc}%
+Swap: ${swapbar} ${swapmax} @ ${swapperc}%
+DISK ${hr} 
+        ${diskiograph 49,220 fef7b2 e18522}
+  SDA: R: ${diskio_read /dev/sda}${goto 160}W: ${diskio_write /dev/sda}
+/: ${fs_bar /} ${fs_size /}   ${fs_used_perc /} %
+/Encrypt: ${fs_bar /encrypt} ${fs_size /encrypt}   ${fs_used_perc /encrypt} %
+/Plex: ${fs_bar /plex} ${fs_size /plex}   ${fs_used_perc /plex} %
+NETWORK ${hr} 
+WLAN0: ${goto 68}${downspeedgraph wlan0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph wlan0 24,88 fef7b2 e18522 -t -l}
+${goto 68}Down: ${downspeedf wlan0}${goto 165}Up: ${upspeedf wlan0}
+TAP0: ${goto 68}${downspeedgraph tap0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph tap0 24,88 fef7b2 e18522 -t -l}
+${goto 68}Down: ${downspeedf tap0}${goto 165}Up: ${upspeedf tap0}
+VPN: ${goto 68}${downspeedgraph tun0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph tun0 24,88 fef7b2 e18522 -t -l}
+${goto 68}Down: ${downspeedf tun0}${goto 165}Up: ${upspeedf tun0}
+WLAN1: ${goto 68}${downspeedgraph wlan1 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph wlan1 24,88 fef7b2 e18522 -t -l}
+${goto 68}Down: ${downspeedf wlan1}${goto 165}Up: ${upspeedf wlan1}
+${color6}${execi 15 du -sh ~/.local/share/Trash/files/ | awk '{print $1}' | sed '/^4.0K/ d'  | sed 's/$/ in the TRASH /'}${color} ${hr}
