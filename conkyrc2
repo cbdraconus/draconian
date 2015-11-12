@@ -1,6 +1,3 @@
-# killall conky && conky -c ~/conky/ARCH.conky &
-# Inspired by lowph on ARCH
-## https://bbs.archlinux.org/viewtopic.php?pid=1084955#p1084955
 ###  Begin Window Settings  ##################################################
 # Create own window instead of using desktop (required in nautilus)
 own_window yes
@@ -173,12 +170,15 @@ DISK ${hr}
         ${diskiograph 49,220 fef7b2 e18522}
   SDA: R: ${diskio_read /dev/sda}${goto 160}W: ${diskio_write /dev/sda}
 /: ${fs_bar /} ${fs_size /}   ${fs_used_perc /} %
+USB ${hr}
+${if_existing /dev/sdb1}${exec df -h |grep "sdb1" |cut -c -38} $else $endif
+${if_existing /dev/sdc1}${exec df -h |grep "sdc1" |cut -c -38}
+${if_existing /dev/sdd1}${exec df -h |grep "sdd1" |cut -c -38}
+${if_existing /dev/sde1}${exec df -h |grep "sde1" |cut -c -38}
 NETWORK ${hr} 
 WLAN0: ${goto 68}${downspeedgraph wlan0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph wlan0 24,88 fef7b2 e18522 -t -l}
 ${goto 68}Down: ${downspeedf wlan0}${goto 165}Up: ${upspeedf wlan0}
 ${goto 68}Down: ${downspeedf tap0}${goto 165}Up: ${upspeedf tap0}
 VPN: ${goto 68}${downspeedgraph tun0 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph tun0 24,88 fef7b2 e18522 -t -l}
 ${goto 68}Down: ${downspeedf tun0}${goto 165}Up: ${upspeedf tun0}
-WLAN1: ${goto 68}${downspeedgraph wlan1 24,88 fef7b2 e18522 -t -l}${goto 165}${upspeedgraph wlan1 24,88 fef7b2 e18522 -t -l}
-${goto 68}Down: ${downspeedf wlan1}${goto 165}Up: ${upspeedf wlan1}
 ${color6}${execi 15 du -sh ~/.local/share/Trash/files/ | awk '{print $1}' | sed '/^4.0K/ d'  | sed 's/$/ in the TRASH /'}${color} ${hr}
