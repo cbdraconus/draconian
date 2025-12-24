@@ -5,7 +5,7 @@ namespace Scheduler.Api.Data;
 
 public static class SeedData
 {
-    public static async Task InitializeAsync(IServiceProvider services)
+    public static async Task InitializeAsync(IServiceProvider services, IConfiguration configuration)
     {
         using var scope = services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<SchedulerDbContext>();
@@ -52,20 +52,26 @@ public static class SeedData
 
         await context.SaveChangesAsync();
 
-        var adminEmail = "admin@department.local";
-        if (await userManager.FindByEmailAsync(adminEmail) is null)
-        {
-            var admin = new ApplicationUser
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true
-            };
+        var adminEmail = configuration["SeedAdmin:Email"] ?? string.Empty;
+        var adminPassword = configuration["SeedAdmin:Password"] ?? string.Empty;
+        var adminUserName = configuration["SeedAdmin:UserName"] ?? adminEmail;
 
-            var result = await userManager.CreateAsync(admin, "ChangeMe!123");
-            if (result.Succeeded)
+        if (!string.IsNullOrWhiteSpace(adminEmail) && !string.IsNullOrWhiteSpace(adminPassword))
+        {
+            if (await userManager.FindByEmailAsync(adminEmail) is null)
             {
-                await userManager.AddToRoleAsync(admin, "Admin");
+                var admin = new ApplicationUser
+                {
+                    UserName = adminUserName,
+                    Email = adminEmail,
+                    EmailConfirmed = true
+                };
+
+                var result = await userManager.CreateAsync(admin, adminPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(admin, "Admin");
+                }
             }
         }
     }

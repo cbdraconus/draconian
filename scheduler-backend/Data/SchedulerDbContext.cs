@@ -37,5 +37,11 @@ public class SchedulerDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(entry => entry.GrantId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<ScheduleEntry>()
+            .HasIndex(entry => new { entry.UserId, entry.StartTime });
+
+        builder.Entity<ScheduleEntry>()
+            .HasIndex(entry => new { entry.ScheduleId, entry.StartTime });
     }
 }

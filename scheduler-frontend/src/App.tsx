@@ -4,7 +4,7 @@ const App = () => {
   return (
     <div className="app">
       <header className="app__header">
-        <h1>Police Department Scheduler</h1>
+        <h1>Responder Schedule</h1>
         <p>Secure scheduling for 8/10/12 hour shifts, assignments, and grants.</p>
       </header>
       <main className="app__grid">

@@ -1,4 +1,4 @@
-# Police Department Scheduler
+# Responder Schedule
 
 This repo now includes a secure, reliable scaffold for a police department scheduling system.
 
@@ -27,8 +27,15 @@ npm install
 npm run dev
 ```
 
-## Default Admin User
-- Email: `admin@department.local`
-- Password: `ChangeMe!123`
+## Seed Admin User
+Set the initial admin credentials in `scheduler-backend/appsettings.json` (or environment variables) under `SeedAdmin`.
 
-> Change the password immediately and set a secure JWT signing key in production.
+```json
+\"SeedAdmin\": {
+  \"UserName\": \"admin\",
+  \"Email\": \"admin@agency.gov\",
+  \"Password\": \"use-a-secure-password\"
+}
+```
+
+> Leave these values blank to skip seeding an admin. Always set a secure JWT signing key in production.
